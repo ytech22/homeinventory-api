@@ -8,10 +8,10 @@ router.use(express.json());
 /* POST users listing. */
 router.post("/", async (req, res, next) => {
   try {
-    const { username, password, created_at, updated_at, deleted_at } = req.body;
+    const { username, password } = req.body;
     const newUser = await pool.query(
-      "INSERT INTO users (username, password, created_at, updated_at, deleted_at ) VALUES ($1, $2 $3 $4 $5) RETURNING *",
-      [username, password, created_at, updated_at, deleted_at]
+      "INSERT INTO users (username, password ) VALUES ($1, $2) RETURNING *",
+      [username, password]
     );
     res.json(newUser);
   } catch (err) {
