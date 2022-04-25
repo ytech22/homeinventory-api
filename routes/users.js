@@ -5,7 +5,12 @@ const pool = require("../db");
 
 router.use(express.json());
 
-/* POST users listing. */
+/**
+ * @api {post} /users/new Create a new user
+ * @apiVersion 1.0.0
+ * @apiDescription Create a new user
+ * @author martinwachira
+ */
 router.post("/new", async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -19,7 +24,13 @@ router.post("/new", async (req, res, next) => {
   }
 });
 
-/* GET users listing. */
+/**
+ * GET users listing.
+ * @param {string} username
+ * @param {string} password
+ * @returns {object} user *
+ *
+ */
 router.get("/", async (req, res, next) => {
   // res.send("respond with a resource");
   try {
@@ -31,7 +42,12 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-/* GET user. */
+/**
+ * @api {get} /users/:id Get user details
+ * @apiVersion 1.0.0
+ * @apiDescription Get user details
+ * @apiParam {Number} id User id
+ */
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -40,6 +56,47 @@ router.get("/:id", async (req, res, next) => {
       id,
     ]);
     res.json(user.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+/**
+ * @api {put} /users/:id Update user details
+ * @apiVersion 1.0.0
+ * @apiDescription Update user details
+ * @apiParam {Number} id User id *
+ */
+
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { username, password } = req.body;
+    const updateUser = await pool.query(
+      "UPDATE users SET username = $1, password = $2 WHERE user_id = $3",
+      [username, password, id]
+    );
+    res.json("user udated successfully");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+/**
+ * @api {delete} /users/:id Delete user
+ * @apiVersion 1.0.0
+ * @apiDescription Delete user
+ * @apiParam {Number} id User id *
+ */
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deleteUser = await pool.query(
+      "DELETE FROM users WHERE user_id = $1",
+      [id]
+    );
+    res.json("user deleted succcessfully");
   } catch (err) {
     console.error(err.message);
   }
