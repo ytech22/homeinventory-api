@@ -3,7 +3,8 @@ var express = require("express");
 var router = express.Router();
 const pool = require("../db");
 
-router.use(express.json());
+//middleware
+router.use(express.json()); //req.body for passing data
 
 /**
  * @api {post} /users/new Create a new user
