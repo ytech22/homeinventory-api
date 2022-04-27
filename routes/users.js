@@ -104,7 +104,7 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 /**
- * @api {cascade} /users/:id Delete user
+ * @api {cascade} /users/:id Cascade user
  * @apiVersion 1.0.0
  * @apiDescription Cascade user
  * @apiParam {Number} id User id *
