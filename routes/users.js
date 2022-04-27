@@ -3,9 +3,6 @@ var express = require("express");
 var router = express.Router();
 const pool = require("../db");
 
-//middleware
-router.use(express.json()); //req.body for passing data
-
 /**
  * @api {post} /users/new Create a new user
  * @apiVersion 1.0.0
