@@ -32,7 +32,9 @@ router.post("/new", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   // res.send("respond with a resource");
   try {
-    const users = await pool.query("SELECT * FROM users");
+    const users = await pool.query(
+      "SELECT user_id, username, email, status, password, last_login FROM users"
+    );
     console.log("users", users.rows);
     res.status(200).json(users.rows);
   } catch (err) {
@@ -50,9 +52,10 @@ router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     console.log("user id =", id);
-    const user = await pool.query("SELECT * FROM users where user_id = $1", [
-      id,
-    ]);
+    const user = await pool.query(
+      "SELECT user_id, username, email, status, password FROM users where user_id = $1",
+      [id]
+    );
     res.status(200).json(user.rows);
   } catch (err) {
     console.error(err.message);
