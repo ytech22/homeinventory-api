@@ -19,7 +19,7 @@ router.post("/new", async (req, res, next) => {
       "INSERT INTO users (username, email, password, status ) VALUES ($1, $2, $3, 1) RETURNING *",
       [username, email, password]
     );
-    res.json(newUser.rows);
+    res.status(201).json(newUser.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -37,7 +37,7 @@ router.get("/", async (req, res, next) => {
   try {
     const users = await pool.query("SELECT * FROM users");
     console.log("users", users.rows);
-    res.json(users.rows);
+    res.status(200).json(users.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -56,7 +56,7 @@ router.get("/:id", async (req, res, next) => {
     const user = await pool.query("SELECT * FROM users where user_id = $1", [
       id,
     ]);
-    res.json(user.rows);
+    res.status(200).json(user.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -77,7 +77,7 @@ router.put("/:id", async (req, res, next) => {
       "UPDATE users SET username = $1, email = $2, password = $3, status = $4 WHERE user_id = $5",
       [username, email, password, status, id]
     );
-    res.json("user udated successfully");
+    res.status(200).json("user updated successfully");
   } catch (err) {
     console.error(err.message);
   }
