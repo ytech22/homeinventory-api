@@ -110,17 +110,17 @@ router.delete("/:id", async (req, res, next) => {
  * @apiParam {Number} id User id *
  */
 
-// router.delete("/:id", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const deleteUser = await pool.query(
-//       "DELETE FROM users WHERE user_id = $1",
-//       [id]
-//     );
-//     res.json("user deleted succcessfully");
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// });
+router.delete("/delete/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deleteUser = await pool.query(
+      "DELETE FROM users WHERE user_id = $1",
+      [id]
+    );
+    res.json("user permanently deleted succcessfully");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 module.exports = router;
