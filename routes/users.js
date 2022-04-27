@@ -13,10 +13,10 @@ router.use(express.json());
  */
 router.post("/new", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     const newUser = await pool.query(
-      "INSERT INTO users (username, password ) VALUES ($1, $2) RETURNING *",
-      [username, password]
+      "INSERT INTO users (username, email, password, status ) VALUES ($1, $2, $3, 1) RETURNING *",
+      [username, email, password]
     );
     res.json(newUser.rows);
   } catch (err) {
@@ -71,10 +71,10 @@ router.get("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { username, password } = req.body;
+    const { username, email, password, status } = req.body;
     const updateUser = await pool.query(
-      "UPDATE users SET username = $1, password = $2 WHERE user_id = $3",
-      [username, password, id]
+      "UPDATE users SET username = $1, email = $2, password = $3, status = $4 WHERE user_id = $5",
+      [username, email, password, status, id]
     );
     res.json("user udated successfully");
   } catch (err) {
@@ -92,8 +92,9 @@ router.put("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { status } = req.body;
     const deleteUser = await pool.query(
-      "DELETE FROM users WHERE user_id = $1",
+      "UPDATE users SET status = 0 WHERE user_id = $1",
       [id]
     );
     res.json("user deleted succcessfully");
@@ -101,5 +102,25 @@ router.delete("/:id", async (req, res, next) => {
     console.error(err.message);
   }
 });
+
+/**
+ * @api {cascade} /users/:id Delete user
+ * @apiVersion 1.0.0
+ * @apiDescription Cascade user
+ * @apiParam {Number} id User id *
+ */
+
+// router.delete("/:id", async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const deleteUser = await pool.query(
+//       "DELETE FROM users WHERE user_id = $1",
+//       [id]
+//     );
+//     res.json("user deleted succcessfully");
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
 
 module.exports = router;
