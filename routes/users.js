@@ -74,10 +74,10 @@ router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     const { username, email, password, status } = req.body;
     const updateUser = await pool.query(
-      "UPDATE users SET username = $1, email = $2, password = $3, status = $4 WHERE user_id = $5",
+      "UPDATE users SET username = $1, email = $2, password = $3, status = $4 WHERE user_id = $5 RETURNING *",
       [username, email, password, status, id]
     );
-    res.status(200).json("user updated successfully");
+    res.status(200).json(updateUser.rows);
   } catch (err) {
     console.error(err.message);
   }
